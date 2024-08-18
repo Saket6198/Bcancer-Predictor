@@ -44,6 +44,8 @@ def get_radar_chart(input_data):
         fill='toself',
         name='Standard Value'
     ))
+    with open("assets/style.css") as f:
+        st.markdown("<style>{}</style>".format(f.read()), unsafe_allow_html=True)
 
     fig.add_trace(go.Scatterpolar(
         r=[
@@ -142,9 +144,9 @@ def add_prediction(input_data):
     st.subheader("Cell Cluster prediction")
     st.write("The Cell Cluster is: ")
     if prediction[0] == 1:
-        st.write("Malicious")
+        st.write("<span class='diagnosis malicious'>Malicious</span>", unsafe_allow_html=True)
     else:
-        st.write("Benign")
+        st.write("<span class='diagnosis benign'>Benign</span>", unsafe_allow_html=True)
     st.write("Probability of being a BENIGN: ", model.predict_proba(scaled_array)[0][0]) # we had transformed it into 2d
     st.write("Probability of being a MALICIOUS: ", model.predict_proba(scaled_array)[0][1])
     st.write("This app can assist medical professionals in making a diagnosis, but should not be used for a "
