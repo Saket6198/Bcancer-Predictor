@@ -6,7 +6,7 @@ import numpy as np
 
 
 def clean_data():
-    bcancer = pd.read_csv('C:/Users/Saket Singh/Desktop/StreamLit_ML_cancer/data/data.csv')
+    bcancer = pd.read_csv('data/data.csv')
     bcancer = bcancer.drop(['Unnamed: 32', 'id'], axis=1)  # deleting unnamed col and id because it's not req
     bcancer['diagnosis'] = bcancer['diagnosis'].map({'M': 1, 'B': 0})  # mapping diagnosis values to 1 and 0
     print(bcancer.head())
