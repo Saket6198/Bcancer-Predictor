@@ -162,10 +162,10 @@ def main():
     )
     with st.container():
         st.title('Breast Cancer Predictor')
-        st.write('Please Connect this app to your cytology lab to help diagnose breast cancer from your tissue '
+        st.write('Please Connect this app to your cytology lab to help diagnose breast cancer from your tissue' 
                  'sample. This app predicts using a machine learning model whether a breast mass is benign or '
-                 'malignant based on the measurements it receives from your cytosis lab. You can also update the '
-                 'measurements by hand using the sliders in the slidebar.')
+                 'malignant based on the measurements it receives from your cytosis lab.')
+        st.write("<span class='desc'>You can also update the measurements by hand using the sliders in the slidebar.</span>",unsafe_allow_html=True)
     col1, col2 = st.columns([4, 1])
     input_data = add_sidebar()
     with col1:

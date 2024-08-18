@@ -16,3 +16,6 @@
 .diagnosis.benign {
     background-color: green;
 }
+.desc{
+    font-weight: bold;
+}
