@@ -13,7 +13,6 @@ def clean_data():
 
 
 def get_radar_chart(input_data):
-    import plotly.graph_objects as go
 
     categories = [
         "Radius", "Texture", "Perimeter",
@@ -62,10 +61,11 @@ def get_radar_chart(input_data):
         polar=dict(
             radialaxis=dict(
                 visible=True,
-                range=[0, 2500]
+                range=[0, 2550]
             )),
         showlegend=True
     )
+    return fig
 
 
 def add_sidebar():
@@ -131,7 +131,8 @@ def main():
     col1, col2 = st.columns([4, 1])
     input_data = add_sidebar()
     with col1:
-        get_radar_chart(input_data)
+        radar_chart = get_radar_chart(input_data)
+        st.plotly_chart(radar_chart)
     with col2:
         st.write('2')
 
