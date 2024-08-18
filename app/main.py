@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
-import pickle as pickle
+import pickle
 import plotly.graph_objects as go
+import numpy as np
 
 
 def clean_data():
@@ -13,7 +14,7 @@ def clean_data():
 
 
 def get_radar_chart(input_data):
-
+    input_data = scaled_data(input_data)
     categories = [
         "Radius", "Texture", "Perimeter",
         "Area", "Smoothness", "Compactness", "Concavity",
@@ -61,7 +62,7 @@ def get_radar_chart(input_data):
         polar=dict(
             radialaxis=dict(
                 visible=True,
-                range=[0, 2550]
+                range=[0, 1]
             )),
         showlegend=True
     )
@@ -115,6 +116,41 @@ def add_sidebar():
     return input_dict
 
 
+# to scale the value b/w 0 and 1 to enhance readability of graph
+def scaled_data(input_dict):
+    data = clean_data()
+    x = data.drop(['diagnosis'], axis=1)
+    scaled_dict = {}  # initialising with an empty dict to store the scaled data
+    for key, value in input_dict.items():
+        max_value = x[key].max()  # creates a max value col
+        min_value = x[key].min()  # creates a min value col
+        scaled_value = (value - min_value) / (
+            max_value - min_value)  # formula to scale value, can only use sklearn.StandardScaler()
+        scaled_dict[key] = scaled_value
+
+    return scaled_dict
+
+
+def add_prediction(input_data):
+    model = pickle.load(open("model/model.pkl", "rb"))
+    scaler = pickle.load(open("model/scaler.pkl", "rb"))
+
+    input_array = np.array(list(input_data.values())).reshape(1, -1)  # since input_data is a dict and it wants a 2d
+    # array we will convert it and reshape to make it col wise
+    scaled_array = scaler.transform(input_array)  # scaling it to match the values properly
+    prediction = model.predict(scaled_array)  # it stores in an array type of size 1
+    st.subheader("Cell Cluster prediction")
+    st.write("The Cell Cluster is: ")
+    if prediction[0] == 1:
+        st.write("Malicious")
+    else:
+        st.write("Benign")
+    st.write("Probability of being a BENIGN: ", model.predict_proba(scaled_array)[0][0]) # we had transformed it into 2d
+    st.write("Probability of being a MALICIOUS: ", model.predict_proba(scaled_array)[0][1])
+    st.write("This app can assist medical professionals in making a diagnosis, but should not be used for a "
+             "professional diagnosis.")
+
+
 def main():
     st.set_page_config(
         page_title="Breast Cancer Predictor ",
@@ -134,7 +170,7 @@ def main():
         radar_chart = get_radar_chart(input_data)
         st.plotly_chart(radar_chart)
     with col2:
-        st.write('2')
+        add_prediction(input_data)
 
 
 if __name__ == '__main__':
