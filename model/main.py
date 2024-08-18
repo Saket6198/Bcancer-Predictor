@@ -10,7 +10,7 @@ bcancer = None
 
 def get_data():
     global bcancer
-    bcancer = pd.read_csv('C:/Users/Saket Singh/Desktop/StreamLit_ML_cancer/data/data.csv')
+    bcancer = pd.read_csv('data/data.csv')
     print(bcancer.head(15))
     return bcancer
 
